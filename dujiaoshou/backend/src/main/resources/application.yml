@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dujiaoshou?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: dujiaoshou
+    password: dujiaoshou
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8080
+
+app:
+  shop:
+    name: "独角兽 · dujiaoshou - Spring 版"
+    currency: "CNY"
+    defaultLocale: "zh_CN"
+    orderExpireMinutes: 30
+
+
+app:
+  admin:
+    token: "changeme-admin-token"
+
+
+app:
+  jwt:
+    secret: "please-change-32bytes-secret-please-change-32bytes"
+  pay:
+    alipay:
+      appId: "your-app-id"
+      privateKey: "your-private-key"
+      alipayPublicKey: "alipay-public-key"
+      notifyUrl: "http://your-domain.com/api/pay/callback/ALIPAY"
+    wechat:
+      mchId: "your-mch-id"
+      appId: "your-app-id"
+      apiKey: "your-api-key"
+      notifyUrl: "http://your-domain.com/api/pay/callback/WECHAT"
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.dujiaoshou.entity

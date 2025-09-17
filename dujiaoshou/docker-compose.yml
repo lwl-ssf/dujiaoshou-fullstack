@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8
+    container_name: dujiaoshou-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-dujiaoshou}
+      MYSQL_USER: ${MYSQL_USER:-dujiaoshou}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-dujiaoshou}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  backend:
+    build: ./backend
+    container_name: dujiaoshou-backend
+    depends_on: [db]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-dujiaoshou}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-dujiaoshou}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-dujiaoshou}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-please-change-32bytes-secret-please-change-32bytes}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: dujiaoshou-frontend
+    depends_on: [backend]
+    ports:
+      - "5173:80"
+    environment: {}
+volumes:
+  db_data:

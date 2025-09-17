@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dujiaoshou.mapper.InventoryCardMapper">
+
+  <resultMap id="CardMap" type="com.example.dujiaoshou.entity.InventoryCard">
+    <id property="id" column="id"/>
+    <result property="product.id" column="product_id"/>
+    <result property="code" column="code"/>
+    <result property="status" column="status"/>
+    <result property="orderId" column="order_id"/>
+  </resultMap>
+
+  <select id="selectFirstAvailableByProduct" resultMap="CardMap">
+    SELECT * FROM inventory_cards
+    WHERE product_id=#{productId} AND status='AVAILABLE'
+    ORDER BY id ASC LIMIT 1
+  </select>
+
+  <select id="countByProductAndStatus" resultType="long">
+    SELECT COUNT(*) FROM inventory_cards WHERE product_id=#{productId} AND status=#{status}
+  </select>
+
+  <update id="updateStatusAndOrder">
+    UPDATE inventory_cards SET status=#{status}, order_id=#{orderId} WHERE id=#{id}
+  </update>
+
+  <insert id="insert" parameterType="com.example.dujiaoshou.entity.InventoryCard" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO inventory_cards(product_id, code, status) VALUES(#{product.id}, #{code}, #{status})
+  </insert>
+
+  <select id="findByOrderId" resultMap="CardMap">
+    SELECT * FROM inventory_cards WHERE order_id=#{orderId}
+  </select>
+</mapper>
