@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dujiaoshou.mapper.UserRoleMapper">
+
+  <resultMap id="URMap" type="com.example.dujiaoshou.entity.UserRole">
+    <id property="id" column="id"/>
+    <result property="user.id" column="user_id"/>
+    <result property="role.id" column="role_id"/>
+  </resultMap>
+  <insert id="insert" parameterType="com.example.dujiaoshou.entity.UserRole" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO user_roles(user_id, role_id) VALUES(#{user.id}, #{role.id})
+  </insert>
+  <select id="findByUser" resultMap="URMap">SELECT * FROM user_roles WHERE user_id=#{userId}</select>
+</mapper>
